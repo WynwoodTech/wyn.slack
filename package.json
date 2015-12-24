@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "express": "^4.13.3",
+    "firebase": "^2.3.2"
+  },
+  "name": "slack-webhook",
+  "version": "1.0.0",
+  "description": "Processes slack webhook calls",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Antonio <antoniom13>",
+  "contibutors": [],
+  "license": "ISC"
+}
