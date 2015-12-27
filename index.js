@@ -16,17 +16,22 @@ app.get('/', function (req, res){
 app.post('/new_message', function (req, res){
   console.log(req.query);
 
-  var payload = {
-    room:  req.query.channel_name,
-    token: req.query.token,
-    message: req.query.text,
-    username: req.query.user_name,
-    timestamp: req.query.timestamp
+  if (req.query.token == config.slack.token){
+    var payload = {
+      room:  req.query.channel_name,
+      token: req.query.token,
+      message: req.query.text,
+      username: req.query.user_name,
+      timestamp: req.query.timestamp
+    }
+
+    pushToFirebase(payload);
+
+    res.send('success');
+  } else {
+    res.send('Token is incorrect');
   }
 
-  pushToFirebase(payload);
-
-  res.send('success');
 });
 
 var pushToFirebase = function(payload){
