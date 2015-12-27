@@ -5,8 +5,12 @@ var common = require('./common');
 var config = common.config();
 
 config.firebase = {
-  url: 'https://wyntech.firebaseIO.com',
+  url: config.firebaseUrl,
   secret: config.firebaseSecret
+}
+
+config.slack = {
+  token: config.slackToken
 }
 
 module.exports = config;
