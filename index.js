@@ -14,15 +14,15 @@ app.get('/', function (req, res){
 });
 
 app.post('/new_message', function (req, res){
-  console.log(req.query);
+  console.log(req.body);
 
-  if (req.query.token == config.slack.token){
+  if (req.body.token == config.slack.token){
     var payload = {
-      room:  req.query.channel_name,
-      token: req.query.token,
-      message: req.query.text,
-      username: req.query.user_name,
-      timestamp: req.query.timestamp
+      room:  req.body.channel_name,
+      token: req.body.token,
+      message: req.body.text,
+      username: req.body.user_name,
+      timestamp: req.body.timestamp
     }
 
     pushToFirebase(payload);
