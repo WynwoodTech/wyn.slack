@@ -10,7 +10,8 @@ config.firebase = {
 }
 
 config.slack = {
-  token: config.slackToken
+  apiToken: config.slackApiToken,
+  webhookToken: config.slackWebhookToken
 }
 
 module.exports = config;
