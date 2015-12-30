@@ -1,10 +1,11 @@
 'user strict';
 
-var config = require('./config/config')
-var firebase = require('./services/firebase');
-var express = require('express');
-var bodyParser = require('body-parser');
-var app = express();
+var config = require('./config/config'),
+  firebase = require('./services/firebase'),
+   express = require('express'),
+bodyParser = require('body-parser'),
+   request = require("request"),
+       app = express();
 
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
@@ -14,18 +15,19 @@ app.get('/', function (req, res){
 });
 
 app.post('/new_message', function (req, res){
-  console.log(req.body);
+  //console.log(req.body);
 
-  if (req.body.token == config.slack.token){
+  if (req.body.token == config.slack.webhookToken){
     var payload = {
       room:  req.body.channel_name,
       token: req.body.token,
+      userId: req.body.user_id,
       message: req.body.text,
       username: req.body.user_name,
       timestamp: req.body.timestamp
     }
 
-    pushToFirebase(payload);
+    getUserProfile(payload,pushToFirebase);
 
     res.send('success');
   } else {
@@ -34,8 +36,26 @@ app.post('/new_message', function (req, res){
 
 });
 
+var getUserProfile = function(payload, callback){
+  request('https://slack.com/api/users.info?token=' + config.slack.apiToken + '&user=' + payload.userId + '&pretty=1',
+    function(error,response,body){
+
+      if (error){
+        return console.log("Error" + error);
+      }
+
+      userInfo = JSON.parse(body).user;
+      payload.color  = userInfo.color;
+      payload.avatar = userInfo.profile.image_192;
+
+      callback(payload);
+    })
+}
+
 var pushToFirebase = function(payload){
   var roomRef = firebase.child(payload.room).push().set({
+    color:     payload.color,
+    avatar:    payload.avatar,
     message:   payload.message,
     username:  payload.username,
     timestamp: payload.timestamp
