@@ -17,7 +17,7 @@ app.get('/', function (req, res){
 app.post('/new_message', function (req, res){
   //console.log(req.body);
 
-  if (req.body.token == config.slack.webhookToken){
+  if (checkToken(req.body.token)){
     var payload = {
       room:  req.body.channel_name,
       token: req.body.token,
@@ -41,6 +41,16 @@ app.post('/new_message', function (req, res){
   }
 
 });
+
+var checkToken = function(token){
+  if (token == config.slack.webhookGeneralToken ||
+      token == config.slack.webhookEngineeringToken ||
+      token == config.slack.webhookRandomToken){
+    return true;
+  } else {
+    return false;
+  }
+}
 
 var getUserProfile = function(payload, callback){
   request('https://slack.com/api/users.info?token=' + config.slack.apiToken + '&user=' + payload.userId + '&pretty=1',
