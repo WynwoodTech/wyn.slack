@@ -48,11 +48,11 @@ var getUserProfile = function(payload, callback){
       payload.color  = userInfo.color;
       payload.avatar = userInfo.profile.image_192;
 
-      callback(payload);
+      callback(payload,resizeMessageLength);
     })
 }
 
-var pushToFirebase = function(payload){
+var pushToFirebase = function(payload, callback){
   var roomRef = firebase.child(payload.room).push().set({
     color:     payload.color,
     avatar:    payload.avatar,
@@ -60,6 +60,22 @@ var pushToFirebase = function(payload){
     username:  payload.username,
     timestamp: payload.timestamp
   })
+
+  callback(payload.room);
+}
+
+var resizeMessageLength = function(room){
+  var ref = firebase.child(room);
+  ref.on('value', function(snapshot){
+    console.log(snapshot.val());
+    var length = Object.keys(snapshot.val()).length
+    if (length > config.maxMessageLength){
+      for (first in snapshot.val()) break;
+      ref.child(first).remove();
+    }
+  }, function(errorObject){
+    console.log("The read failed: " + errorObject.code);
+  });
 }
 
 var server = app.listen(3002, function (){
