@@ -27,10 +27,16 @@ app.post('/new_message', function (req, res){
       timestamp: req.body.timestamp
     }
 
+    if (payload.message == ''){
+      return res.send('No message provided');
+    }
+
     getUserProfile(payload,pushToFirebase);
 
     res.send('success');
+
   } else {
+
     res.send('Token is incorrect');
   }
 
@@ -45,6 +51,7 @@ var getUserProfile = function(payload, callback){
       }
 
       userInfo = JSON.parse(body).user;
+
       payload.color  = userInfo.color;
       payload.avatar = userInfo.profile.image_192;
 
