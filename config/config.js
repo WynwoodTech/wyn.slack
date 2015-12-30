@@ -11,7 +11,9 @@ config.firebase = {
 
 config.slack = {
   apiToken: config.slackApiToken,
-  webhookToken: config.slackWebhookToken
+  webhookGeneralToken: config.slackWebhookGeneralToken,
+  webhookEngineeringToken: config.slackWebhookEngineeringToken,
+  webhookRandomToken: config.slackWebhookRandomToken
 }
 
 module.exports = config;
