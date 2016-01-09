@@ -15,6 +15,22 @@ app.get('/', function (req, res){
   res.send('Hello World!');
 });
 
+app.get('/set_members', function(req,res){
+  var respond = function(){
+    res.send('Members Saved!');
+  }
+
+  slackSvc.setSlackMembers(channelId,respond);
+});
+
+app.get('/members', function (req, res){
+  var respond = function(members){
+    res.send(members);
+  }
+
+  slackSvc.getSlackMembers(respond);
+});
+
 app.post('/new_message', function (req, res){
   //console.log(req.body);
 
@@ -45,5 +61,6 @@ var server = app.listen(3002, function (){
   var host = server.address().address;
   var port = server.address().port;
 
+  slackSvc.setSlackMembers('',function(){});
   console.log('Example app listening at http://%s:%s', host, port);
 })
