@@ -6,7 +6,15 @@ bodyParser = require('body-parser'),
    request = require("request"),
        app = express(),
   slackSvc = require('./services/slack'),
-    firebaseSvc = require('./services/firebase');
+      cors = require('cors'),
+      firebaseSvc = require('./services/firebase');
+
+var corsOptions = {
+  origin: [ 'http://127.0.0.1:8081'
+    ,'http://127.0.0.1'
+    ,'http://localhost'
+  ]
+};
 
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
@@ -15,20 +23,20 @@ app.get('/', function (req, res){
   res.send('Hello World!');
 });
 
+app.get('/members', cors(corsOptions), function (req, res){
+  var respond = function(members){
+    res.send(members);
+  }
+
+  slackSvc.getSlackMembers(respond);
+});
+
 app.get('/set_members', function(req,res){
   var respond = function(){
     res.send('Members Saved!');
   }
 
   slackSvc.setSlackMembers(channelId,respond);
-});
-
-app.get('/members', function (req, res){
-  var respond = function(members){
-    res.send(members);
-  }
-
-  slackSvc.getSlackMembers(respond);
 });
 
 app.post('/new_message', function (req, res){
