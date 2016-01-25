@@ -5,17 +5,18 @@ var config = require('./config/config'),
 bodyParser = require('body-parser'),
    request = require("request"),
        app = express(),
-  slackSvc = require('./services/slack'),
-      cors = require('cors'),
-      firebaseSvc = require('./services/firebase');
+       cors = require('cors'),
+       redisSvc = require('./services/redisSVc'),
+       slackSvc = require('./services/slackSvc'),
+       firebaseSvc = require('./services/firebaseSvc');
 
 var corsOptions = {
   origin: [ 
-     'http://127.0.0.1:8081'
-    ,'http://127.0.0.1:8080'
-    ,'http://localhost'
-    ,'http://localhost:8080'
-    ,'http://wyn.tech'
+    'http://127.0.0.1:8081'
+  ,'http://127.0.0.1:8080'
+  ,'http://localhost'
+  ,'http://localhost:8080'
+  ,'http://wyn.tech'
   ]
 };
 
@@ -60,6 +61,7 @@ app.post('/new_message', function (req, res){
     }
 
     slackSvc.getUserProfile(payload,firebaseSvc.pushToFirebase);
+    redisSvc.increaseMessageCounter();
 
     res.send('success');
   } else {

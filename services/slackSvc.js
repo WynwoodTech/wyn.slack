@@ -1,10 +1,10 @@
 "use strict";
 
 var config = require('../config/config.js'),
-    request = require("request"),
-    firebaseSvc = require('./firebase'),
-    redis = require('redis'),
-    redisClient = redis.createClient(), multi;
+  request = require("request"),
+  firebaseSvc = require('./firebaseSvc'),
+  redis = require('redis'),
+  redisClient = redis.createClient(), multi;
 
 function getUserProfile(payload,cb){
   request('https://slack.com/api/users.info?token=' + config.slack.apiToken + '&user=' + payload.userId + '&pretty=1', function (error, response, body) {
@@ -21,7 +21,7 @@ function getUserProfile(payload,cb){
 function checkToken(token){
   if (token == config.slack.webhookGeneralToken ||
       token == config.slack.webhookEngineeringToken ||
-      token == config.slack.webhookRandomToken) {
+        token == config.slack.webhookRandomToken) {
     return true;
   } else {
     return false;
