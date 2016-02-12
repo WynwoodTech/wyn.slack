@@ -1,22 +1,27 @@
 'user strict';
 
-var config = require('./config/config'),
-   express = require('express'),
-bodyParser = require('body-parser'),
-   request = require("request"),
-       app = express(),
+var  config = require('./config/config'),
+    express = require('express'),
+         fs = require('fs'),
+       http = require('http'),
+      https = require('https'),
+ privateKey = fs.readFileSync('../ssl/wyn.tech.key','utf8'),
+certificate = fs.readFileSync('../ssl/wyn.tech.crt','utf8'),
+ bodyParser = require('body-parser'),
+    request = require("request"),
+        app = express(),
        cors = require('cors'),
-       redisSvc = require('./services/redisSVc'),
+       redisSvc = require('./services/redisSvc'),
        slackSvc = require('./services/slackSvc'),
        firebaseSvc = require('./services/firebaseSvc');
 
 var corsOptions = {
   origin: [ 
-    'http://127.0.0.1:8081'
+   'http://127.0.0.1:8081'
   ,'http://127.0.0.1:8080'
   ,'http://localhost'
   ,'http://localhost:8080'
-  ,'http://wyn.tech'
+  ,'https://wyn.tech'
   ]
 };
 
@@ -69,11 +74,17 @@ app.post('/new_message', function (req, res){
   }
 
 });
+var options = {
+  key: privateKey,
+  cert: certificate
+}
 
-var server = app.listen(3002, function (){
+var server = https.createServer(options,app);
+
+server.listen(3002, '10.154.46.117', function (){
   var host = server.address().address;
   var port = server.address().port;
 
   slackSvc.setSlackMembers('',function(){});
-  console.log('Example app listening at http://%s:%s', host, port);
+  console.log('wyn.slack app listening at https://%s:%s', host, port);
 })
