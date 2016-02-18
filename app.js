@@ -48,8 +48,16 @@ app.get('/set_members', function(req,res){
   slackSvc.setSlackMembers(channelId,respond);
 });
 
+app.post('/incr_message_counter', function (req, res){
+  if (slackSvc.checkToken(req.body.token)){
+    redisSvc.increaseMessageCounter();
+    res.send("Message counter increased!");
+  } else {
+    res.send("Token is invalid");
+  }
+});
+
 app.post('/new_message', function (req, res){
-  //console.log(req.body);
 
   if (slackSvc.checkToken(req.body.token)){
     var payload = {
@@ -70,7 +78,7 @@ app.post('/new_message', function (req, res){
 
     res.send('success');
   } else {
-    res.send('Token is incorrect');
+    res.send('Token is invalid');
   }
 
 });
