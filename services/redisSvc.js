@@ -7,10 +7,10 @@ var config = require('../config/config.js'),
 
 function increaseMessageCounter(){
   redisClient.incr('wyn.tech/message-counter');
-  getMessageCounter();
+  updateMessageCounter();
 }
 
-function getMessageCounter(){
+function updateMessageCounter(){
   redisClient.get('wyn.tech/message-counter', function(err, reply){
     firebaseSvc.setMessageCounter(reply);
   });
