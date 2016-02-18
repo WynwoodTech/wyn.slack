@@ -13,7 +13,8 @@ config.slack = {
   apiToken: config.slackApiToken,
   webhookGeneralToken: config.slackWebhookGeneralToken,
   webhookEngineeringToken: config.slackWebhookEngineeringToken,
-  webhookRandomToken: config.slackWebhookRandomToken
+  webhookRandomToken: config.slackWebhookRandomToken,
+  webhookTestingToken: config.slackWebhookTestingToken
 }
 
 module.exports = config;

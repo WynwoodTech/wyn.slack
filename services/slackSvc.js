@@ -21,7 +21,8 @@ function getUserProfile(payload,cb){
 function checkToken(token){
   if (token == config.slack.webhookGeneralToken ||
       token == config.slack.webhookEngineeringToken ||
-        token == config.slack.webhookRandomToken) {
+      token == config.slack.webhookRandomToken ||
+      token == config.slack.webhookTestingToken) {
     return true;
   } else {
     return false;
