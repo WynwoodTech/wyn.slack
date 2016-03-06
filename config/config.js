@@ -9,6 +9,10 @@ config.firebase = {
   secret: config.firebaseSecret
 }
 
+config.server = {
+  listenAddress: config.listenAddress;
+}
+
 config.slack = {
   apiToken: config.slackApiToken,
   webhookGeneralToken: config.slackWebhookGeneralToken,

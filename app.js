@@ -101,7 +101,7 @@ var options = {
 
 var server = https.createServer(options,app);
 
-server.listen(3002, '10.154.46.117', function (){
+server.listen(3002, config.server.listenAddress, function (){
   var host = server.address().address;
   var port = server.address().port;
 
