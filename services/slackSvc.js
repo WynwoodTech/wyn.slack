@@ -18,6 +18,24 @@ function getUserProfile(payload,cb){
   });
 }
 
+function sendNewMemberInvite(email){
+
+  var postData = {
+    email: email,
+    token: config.slack.apiToken,
+    set_active: true
+  };
+
+  request.post({url: 'https://wynwood-tech.slack.com/api/users.admin.invite', form: postData}, function (error,response,body){
+    if (!error && response.statusCode == 200) {
+      console.log("Member with email: " + email + " was invited !");
+    } else {
+      console.log("Member with email: " + email + " was not invited");
+      console.log("Error: " + error);
+    }
+  });
+}
+
 function checkToken(token){
   if (token == config.slack.webhookGeneralToken ||
       token == config.slack.webhookEngineeringToken ||
@@ -114,6 +132,9 @@ var slackSvc = {
   setSlackMembers: function(channelId,cb){
     return setSlackMembers(channelId, cb);
   },
+  sendNewMemberInvite: function(email){
+    return sendNewMemberInvite(email);
+  }
 };
 
 module.exports = slackSvc;

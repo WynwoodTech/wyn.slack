@@ -29,7 +29,7 @@ app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 app.get('/', function (req, res){
-  res.send('Hello World!');
+  res.send({message: "Hello World!"});
 });
 
 app.get('/members', cors(corsOptions), function (req, res){
@@ -42,10 +42,22 @@ app.get('/members', cors(corsOptions), function (req, res){
 
 app.get('/set_members', function(req,res){
   var respond = function(){
-    res.send('Members Saved!');
+    res.send({message: "Members Saved!"});
   }
 
   slackSvc.setSlackMembers(channelId,respond);
+});
+
+app.get('/new_subscriber_request', function(req,res){
+  var email = req.body.data.email;
+  slackSvc.sendNewMemberInvite(email);
+  return res.send({message: "Request has been sent"});
+});
+
+app.post('/new_subscriber_request', function(req,res){
+  var email = req.body.data.email;
+  slackSvc.sendNewMemberInvite(email);
+  return res.send({message: "Request has been sent"});
 });
 
 app.post('/incr_message_counter', function (req, res){
@@ -53,7 +65,7 @@ app.post('/incr_message_counter', function (req, res){
     redisSvc.increaseMessageCounter();
     res.send("Message counter increased!");
   } else {
-    res.send("Token is invalid");
+    res.send({message: "Token is invalid"});
   }
 });
 
