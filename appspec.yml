@@ -4,3 +4,11 @@ files:
   - source: /
     destination: /var/mount/wyn.slack
 hooks:
+  ApplicationStart:
+    - location: scripts/start_pm2
+      timeout: 300
+      runas: app
+  ApplicationStop:
+    - location: scripts/stop_pm2
+      timeout: 300
+      runas: app
