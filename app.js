@@ -49,15 +49,27 @@ app.get('/set_members', function(req,res){
 });
 
 app.get('/new_subscriber_request', function(req,res){
-  var email = req.body.data.email;
-  slackSvc.sendNewMemberInvite(email);
-  return res.send({message: "Request has been sent"});
+  if(req.body.data){
+    var email = req.body.data.email;
+    slackSvc.sendNewMemberInvite(email);
+    var message = "Request has been sent";
+  } else {
+    var message = "No email has been provided";
+  }
+
+  return res.send({message: message});
 });
 
 app.post('/new_subscriber_request', function(req,res){
-  var email = req.body.data.email;
-  slackSvc.sendNewMemberInvite(email);
-  return res.send({message: "Request has been sent"});
+  if(req.body.data){
+    var email = req.body.data.email;
+    slackSvc.sendNewMemberInvite(email);
+    var message = "Request has been sent";
+  } else {
+    var message = "No email has been provided";
+  }
+
+  return res.send({message: message});
 });
 
 app.post('/incr_message_counter', function (req, res){

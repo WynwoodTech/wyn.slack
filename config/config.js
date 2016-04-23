@@ -10,7 +10,7 @@ config.firebase = {
 }
 
 config.server = {
-  listenAddress: config.listenAddress;
+  listenAddress: config.listenAddress
 }
 
 config.slack = {
